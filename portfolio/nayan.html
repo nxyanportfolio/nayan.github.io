@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manga Portfolio</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  font-family: 'Press Start 2P', cursive;
+  background: #fff;
+  color: #000;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+header {
+  text-align: center;
+  padding: 40px 0 10px;
+  font-size: 1.3rem;
+}
+
+.hero {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 40px;
+}
+
+.card {
+  border: 3px solid #000;
+  border-radius: 8px;
+  padding: 30px 20px;
+  cursor: pointer;
+  background: #fafafa;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 5px 5px 0 #000;
+}
+
+/* --- Tear & Photo Display --- */
+.tear-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: white;
+  z-index: 1000;
+  animation: tearOpen 1.3s ease forwards;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+@keyframes tearOpen {
+  0% { clip-path: polygon(0 0,100% 0,100% 0,0 0); }
+  50% { clip-path: polygon(0 0,100% 0,100% 60%,0 60%); }
+  100% { clip-path: polygon(0 0,100% 0,100% 100%,0 100%); }
+}
+
+.photos-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  opacity: 0;
+  animation: showPhotos 1s ease forwards;
+  animation-delay: 1.2s;
+}
+
+@keyframes showPhotos {
+  to { opacity: 1; }
+}
+
+.photos-container img {
+  max-width: 260px;
+  height: auto;
+  border: 3px solid #000;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 4px 4px 0 #000;
+  cursor: pointer;
+  transform: scale(0.9);
+  transition: transform 0.2s ease;
+}
+
+.photos-container img:hover {
+  transform: scale(1);
+}
+
+/* Fullscreen viewer */
+.viewer {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+.viewer img {
+  max-width: 90%;
+  max-height: 90%;
+  border: 3px solid #fff;
+  border-radius: 8px;
+}
+.viewer::after {
+  content: "×";
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  color: white;
+  font-size: 2.5rem;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>My Manga Portfolio</h1>
+</header>
+
+<section id="projects">
+  <h2>Projects Showcase</h2>
+  <div class="projects-grid">
+    <div class="card" id="project1">Project 1</div>
+    <div class="card">Project 2</div>
+    <div class="card">Project 3</div>
+    <div class="card">Project 4</div>
+    <div class="card">Project 5</div>
+    <div class="card">Project 6</div>
+  </div>
+</section>
+
+<footer style="text-align:center; padding:30px;">
+  <p>Made by Nayan • Instagram • WhatsApp • Discord</p>
+</footer>
+
+<script>
+const project1 = document.getElementById('project1');
+
+project1.addEventListener('click', () => {
+  const overlay = document.createElement('div');
+  overlay.className = 'tear-overlay';
+
+  const photosContainer = document.createElement('div');
+  photosContainer.className = 'photos-container';
+
+  for (let i = 1; i <= 5; i++) {
+    const img = document.createElement('img');
+    img.src = `${i}.png`;
+    img.alt = `Design ${i}`;
+    img.style.animation = `showPhotos 0.5s ease ${1 + i * 0.3}s forwards`;
+    img.addEventListener('click', () => openViewer(img.src));
+    photosContainer.appendChild(img);
+  }
+
+  overlay.appendChild(photosContainer);
+  document.body.appendChild(overlay);
+
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.remove();
+  });
+});
+
+function openViewer(src) {
+  const viewer = document.createElement('div');
+  viewer.className = 'viewer';
+  const img = document.createElement('img');
+  img.src = src;
+  viewer.appendChild(img);
+  document.body.appendChild(viewer);
+  viewer.addEventListener('click', () => viewer.remove());
+}
+</script>
+
+</body>
+</html>
